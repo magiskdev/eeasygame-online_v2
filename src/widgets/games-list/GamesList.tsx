@@ -40,11 +40,18 @@ const games: Game[] = [
       "Один шпион не знает место, остальные вычисляют его. 5+ игроков.",
     status: "available",
   },
+  // {
+  //   id: "whoami",
+  //   title: "Кто я?",
+  //   slug: "/games/whoami",
+  //   description: "Игроки угадывают свою роль вопросами «да/нет». 5+ игроков.",
+  //   status: "available",
+  // },
   {
-    id: "whoami",
-    title: "Кто я?",
-    slug: "/games/whoami",
-    description: "Игроки угадывают свою роль вопросами «да/нет». 5+ игроков.",
+    id: "bunkre",
+    title: "Бункер",
+    description: "Выживай, голосуй, применяй способности в постапокалипсисе",
+    slug: "/games/bunker",
     status: "available",
   },
 ];
@@ -60,7 +67,7 @@ export const GamesList: React.FC = () => (
         </header>
 
         <p className="text-gray-400 flex-1">{g.description}</p>
-        
+
         <div className="mt-4">
           {g.status === "available" ? (
             <Link href={g.slug as any} className="btn btn-primary">
