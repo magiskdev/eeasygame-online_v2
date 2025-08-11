@@ -1,22 +1,23 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { Team } from '../lib/types';
 
-type Team = { id: string; name: string; score: number };
+interface TeamManagerProps {
+  teams: Team[];
+  disabled?: boolean;
+  onAddTeam: (name: string) => void;
+  onRenameTeam: (id: string, name: string) => void;
+  onRemoveTeam: (id: string) => void;
+}
 
 export function TeamManager({
   teams,
-  onAdd,
-  onRename,
-  onRemove,
-  disabledWhileRunning,
-}: {
-  teams: Team[];
-  onAdd: (name: string) => void;
-  onRename: (id: string, name: string) => void;
-  onRemove: (id: string) => void;
-  disabledWhileRunning?: boolean;
-}) {
+  disabled = false,
+  onAddTeam,
+  onRenameTeam,
+  onRemoveTeam,
+}: TeamManagerProps) {
   const [name, setName] = useState('');
 
   return (
@@ -25,21 +26,21 @@ export function TeamManager({
 
       <div className="flex gap-2 mb-3">
         <input
-          className="flex-1 rounded-xl bg-white/5 border border-white/10 px-3 py-2"
+          className="flex-1 min-w-0 rounded-xl bg-white/5 border border-white/10 px-3 py-2"
           placeholder="Имя команды"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          disabled={!!disabledWhileRunning}
+          disabled={!!disabled}
         />
 
         <button
-          className="btn"
+          className="btn flex-shrink-0 px-3 py-2"
           onClick={() => {
             if (!name.trim()) return;
-            onAdd(name.trim());
+            onAddTeam(name.trim());
             setName('');
           }}
-          disabled={!!disabledWhileRunning}
+          disabled={!!disabled}
         >
           Добавить
         </button>
@@ -49,16 +50,16 @@ export function TeamManager({
         {teams.map((t) => (
           <li key={t.id} className="flex gap-2">
             <input
-              className="flex-1 rounded-xl bg-white/5 border border-white/10 px-3 py-2"
+              className="flex-1 min-w-0 rounded-xl bg-white/5 border border-white/10 px-3 py-2"
               value={t.name}
-              onChange={(e) => onRename(t.id, e.target.value)}
-              disabled={!!disabledWhileRunning}
+              onChange={(e) => onRenameTeam(t.id, e.target.value)}
+              disabled={!!disabled}
             />
             
             <button
-              className="btn"
-              onClick={() => onRemove(t.id)}
-              disabled={teams.length <= 2 || !!disabledWhileRunning}
+              className="btn flex-shrink-0 px-3 py-2 w-10 h-10 flex items-center justify-center"
+              onClick={() => onRemoveTeam(t.id)}
+              disabled={teams.length <= 2 || !!disabled}
               title={teams.length <= 2 ? 'Нужно минимум 2 команды' : 'Удалить'}
             >
               ✕

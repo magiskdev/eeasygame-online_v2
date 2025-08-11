@@ -1,35 +1,34 @@
 'use client';
 
-type Team = { id: string; name: string; score: number };
+import type { Team } from "../lib/types";
 
-export function Scoreboard({
-  teams,
-  activeIdx,
-  goal,
-}: {
+interface ScoreboardProps {
   teams: Team[];
-  activeIdx: number;
-  goal: number;
-}) {
+  goalPoints: number;
+  activeTeamIdx: number;
+}
+
+export function Scoreboard({ teams, goalPoints, activeTeamIdx }: ScoreboardProps) {
   return (
-    <div>
-      <h3 className="font-semibold mb-2">Счёт</h3>
-      <ul className="space-y-2">
-        {teams.map((t, i) => (
-          <li
-            key={t.id}
-            className={
-              'flex items-center justify-between rounded-xl px-3 py-2 border ' +
-              (i === activeIdx
-                ? 'border-blue-400/40 bg-blue-500/10'
-                : 'border-white/10 bg-white/5')
-            }
+    <div className="card">
+      <h3 className="text-xl font-bold mb-4">Счёт</h3>
+      <div className="space-y-3">
+        {teams.map((team, idx) => (
+          <div
+            key={team.id}
+            className={`flex justify-between items-center p-3 rounded-lg transition-colors ${
+              idx === activeTeamIdx
+                ? "bg-blue-500/20 border border-blue-500/30"
+                : "bg-white/5"
+            }`}
           >
-            <span className="truncate">{t.name}</span>
-            <span className="font-semibold">{t.score} / {goal}</span>
-          </li>
+            <span className="font-medium">{team.name}</span>
+            <span className="text-lg font-bold font-mono tabular-nums">
+              {team.score} / {goalPoints}
+            </span>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

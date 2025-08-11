@@ -1,6 +1,6 @@
 "use client";
 
-type Team = { id: string; name: string; score: number };
+import type { Team } from '../lib/types';
 
 export function Scoreboard({
   teams,
@@ -26,7 +26,7 @@ export function Scoreboard({
             }
           >
             <span className="truncate">{t.name}</span>
-            <span className="font-semibold">
+            <span className="font-mono tabular-nums font-semibold">
               {t.score} / {goal}
             </span>
           </li>

@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "./Modal";
 import { Button } from "./Button";
+import { Checkbox } from "./Checkbox";
+import { Select, type SelectOption } from "./Select";
 
 export interface GameSettingsField {
   key: string;
@@ -43,8 +45,13 @@ export function GameSettingsModal<T extends Record<string, any>>({
     }
   }, [settings, open]);
 
+
   const handleFieldChange = (key: string, value: any) => {
-    setDraft(prev => ({ ...prev, [key]: value }));
+    setDraft(prev => {
+      const updated = { ...prev, [key]: value };
+      
+      return updated;
+    });
   };
 
   const handleSave = () => {
@@ -71,30 +78,21 @@ export function GameSettingsModal<T extends Record<string, any>>({
 
       case 'boolean':
         return (
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={value}
-              onChange={(e) => handleFieldChange(field.key, e.target.checked)}
-              className="w-4 h-4 text-blue-600 bg-white/5 border-white/20 rounded focus:ring-blue-500"
-            />
-            <span className="text-sm">{field.label}</span>
-          </label>
+          <Checkbox
+            label={field.label}
+            checked={value}
+            onChange={(checked) => handleFieldChange(field.key, checked)}
+          />
         );
 
       case 'select':
         return (
-          <select
+          <Select
             value={value}
-            onChange={(e) => handleFieldChange(field.key, e.target.value)}
-            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm focus:border-blue-400 focus:outline-none"
-          >
-            {field.options?.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            options={field.options?.map(opt => ({ value: String(opt.value), label: opt.label })) || []}
+            onChange={(newValue) => handleFieldChange(field.key, newValue)}
+            placeholder={field.placeholder}
+          />
         );
 
       case 'textarea':
@@ -114,9 +112,9 @@ export function GameSettingsModal<T extends Record<string, any>>({
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={`Настройки — ${gameTitle}`}>
+    <Modal open={open} title={`Настройки — ${gameTitle}`}>
       <div className="space-y-4">
-        <div className="grid gap-4">
+        <div className="grid gap-4" key={fields.map(f => f.key).join(',')}>
           {fields.map((field) => (
             <div key={field.key}>
               {field.type !== 'boolean' && (
@@ -134,7 +132,7 @@ export function GameSettingsModal<T extends Record<string, any>>({
 
         {additionalContent}
 
-        <div className="flex gap-3 pt-4 border-t border-white/10">
+        <div className="flex gap-3 pt-4 border-t border-white/10 w-full justify-end">
           <Button variant="ghost" onClick={onClose}>
             Отмена
           </Button>

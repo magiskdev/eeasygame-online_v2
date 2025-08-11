@@ -4,11 +4,11 @@ import React from "react";
 import { GameHowToPlayModal } from "shared/ui";
 
 export interface AliasHowToPlayProps {
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
 }
 
-export const AliasHowToPlay: React.FC<AliasHowToPlayProps> = ({ open, onClose }) => {
+export const AliasHowToPlay: React.FC<AliasHowToPlayProps> = ({ isOpen, onClose }) => {
   const rules = (
     <ol className="list-decimal pl-6 space-y-2">
       <li>
@@ -36,7 +36,7 @@ export const AliasHowToPlay: React.FC<AliasHowToPlayProps> = ({ open, onClose })
 
   return (
     <GameHowToPlayModal
-      open={open}
+      open={isOpen}
       onClose={onClose}
       gameTitle="Alias"
       rules={rules}

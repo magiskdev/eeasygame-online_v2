@@ -4,16 +4,18 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export const Modal: React.FC<{
   open: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   title?: string;
   children: React.ReactNode;
 }> = ({ open, onClose, title, children }) => {
   useEffect(() => {
+    if (!onClose) return;
+
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     if (open) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
-  
+
   return (
     <AnimatePresence>
       {open && (
@@ -36,11 +38,14 @@ export const Modal: React.FC<{
           >
             {title && <h3 className="text-xl font-semibold mb-3">{title}</h3>}
             <div className="text-gray-200">{children}</div>
-            <div className="mt-4 text-right">
-              <button className="btn" onClick={onClose}>
-                Понятно
-              </button>
-            </div>
+
+            {onClose && (
+              <div className="mt-4 text-right">
+                <button className="btn" onClick={onClose}>
+                  Понятно
+                </button>
+              </div>
+            )}
           </motion.div>
         </motion.div>
       )}

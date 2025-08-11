@@ -24,7 +24,7 @@ export function TeamManager({
       <h3 className="font-semibold mb-2">Команды</h3>
       <div className="flex gap-2 mb-3">
         <input
-          className="flex-1 rounded-xl bg-white/5 border border-white/10 px-3 py-2"
+          className="w-48 rounded-xl bg-white/5 border border-white/10 px-3 py-2"
           placeholder="Имя команды"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -47,7 +47,7 @@ export function TeamManager({
         {teams.map((t) => (
           <li key={t.id} className="flex gap-2">
             <input
-              className="flex-1 rounded-xl bg-white/5 border border-white/10 px-3 py-2"
+              className="w-48 rounded-xl bg-white/5 border border-white/10 px-3 py-2"
               value={t.name}
               onChange={(e) => onRename(t.id, e.target.value)}
               disabled={!!disabledWhileRunning}
