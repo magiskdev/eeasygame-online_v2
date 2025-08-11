@@ -50,9 +50,10 @@ export function CrocodileSettings({ open, onClose, settings, onSave }: Crocodile
         type: 'select' as const,
         options: [
           { value: 'basic', label: 'Базовый' },
-          { value: 'kids', label: 'Детский' },
+          { value: 'actions', label: 'Действия' },
+          { value: 'animals', label: 'Животные' },
+          { value: 'movies', label: 'Фильмы' },
           { value: 'hard', label: 'Сложный' },
-          { value: 'it', label: 'IT-термины' },
           { value: 'custom', label: 'Свой словарь' },
         ],
       },

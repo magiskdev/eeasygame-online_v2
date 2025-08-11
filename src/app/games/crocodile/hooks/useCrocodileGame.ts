@@ -125,7 +125,7 @@ export function useCrocodileGame() {
     // Добавляем в лог
     setTurnLog(prev => [...prev, {
       teamId: teams[activeTeamIdx].id,
-      word: current.word,
+      text: current.text,
       difficulty: current.difficulty,
       category: current.category,
       result: "correct",
@@ -149,7 +149,7 @@ export function useCrocodileGame() {
     // Добавляем в лог
     setTurnLog(prev => [...prev, {
       teamId: teams[activeTeamIdx].id,
-      word: current.word,
+      text: current.text,
       difficulty: current.difficulty,
       category: current.category,
       result: "skip",

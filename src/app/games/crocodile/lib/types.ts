@@ -19,7 +19,7 @@ export interface CrocodileSettings {
 
 export interface TurnLogItem {
   teamId: string;
-  word: string;
+  text: string;
   difficulty: "easy" | "medium" | "hard";
   category?: string;
   result: "correct" | "skip";

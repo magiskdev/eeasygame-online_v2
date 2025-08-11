@@ -4,7 +4,7 @@ import { Modal } from "shared/ui/Modal";
 
 type Item = {
   teamId: string;
-  word: string;
+  text: string;
   difficulty: "easy" | "medium" | "hard";
   category?: string;
   result: "correct" | "skip";
@@ -52,7 +52,7 @@ export function RoundLogModal({
                     <td className="py-1 pr-2">
                       {byTeam.get(it.teamId) || "—"}
                     </td>
-                    <td className="py-1 pr-2">{it.word}</td>
+                    <td className="py-1 pr-2">{it.text}</td>
                     <td className="py-1 pr-2">{it.category || "—"}</td>
                     <td className="py-1 pr-2">{it.difficulty}</td>
                     <td className="py-1 pr-2">
