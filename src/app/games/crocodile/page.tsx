@@ -6,7 +6,7 @@ import { useKeyboardControls } from "./hooks/useKeyboardControls";
 import { GameHeader } from "./components/GameHeader";
 import { GameBoard } from "./components/GameBoard";
 import { GameControls } from "./components/GameControls";
-import { WinnerDisplay } from "./components/WinnerDisplay";
+
 import { Scoreboard } from "./components/Scoreboard";
 import { TeamManager } from "./components/TeamManager";
 
@@ -51,27 +51,44 @@ export default function CrocodileGamePage() {
       <div className="grid lg:grid-cols-[1fr_400px] gap-6 mb-6">
         {/* Левая колонка: игровое поле */}
         <div className="space-y-6">
-          {/* Игровое поле */}
-          <GameBoard
-            current={current}
-            hidden={gameState.hidden}
-            hintVisible={gameState.hintVisible}
-            turnScore={gameState.turnScore}
-            allowHints={settings.allowHints}
-            difficultyScoring={settings.difficultyScoring}
-            currentPoints={currentPoints}
-          />
+          {gameState.gameEnded && winner ? (
+            /* Отображение победителя */
+            <div className="card border-2 border-green-500/50 text-center py-12">
+              <div className="text-4xl font-bold mb-4 text-green-400">🎉 Победа! 🎉</div>
+              <div className="text-2xl font-semibold mb-2">{winner.name}</div>
+              <div className="text-gray-300 mb-4">
+                Достигли цели в {settings.goalPoints} очков с результатом {winner.score} очков!
+              </div>
+              <button 
+                className="btn btn-primary"
+                onClick={gameActions.resetGame}
+              >
+                Новая игра
+              </button>
+            </div>
+          ) : (
+            /* Обычное игровое поле */
+            <>
+              <GameBoard
+                current={current}
+                hidden={gameState.hidden}
+                hintVisible={gameState.hintVisible}
+                turnScore={gameState.turnScore}
+                allowHints={settings.allowHints}
+                difficultyScoring={settings.difficultyScoring}
+                currentPoints={currentPoints}
+              />
 
-          {/* Управление */}
-          <div className="card">
-            <GameControls
-              gameState={gameState}
-              gameActions={gameActions}
-              minusOnSkip={settings.minusOnSkip}
-            />
-          </div>
-
-
+              {/* Управление */}
+              <div className="card">
+                <GameControls
+                  gameState={gameState}
+                  gameActions={gameActions}
+                  minusOnSkip={settings.minusOnSkip}
+                />
+              </div>
+            </>
+          )}
         </div>
 
         {/* Правая колонка: счет и управление командами */}
@@ -95,8 +112,7 @@ export default function CrocodileGamePage() {
         </aside>
       </div>
 
-      {/* Победитель */}
-      <WinnerDisplay winner={winner} goalPoints={settings.goalPoints} />
+
 
       {/* Модальные окна */}
       <CrocodileHowToPlay 

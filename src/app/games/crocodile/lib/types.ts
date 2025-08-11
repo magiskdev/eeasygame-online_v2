@@ -30,15 +30,16 @@ export interface TurnLogItem {
 export interface GameState {
   teams: Team[];
   activeTeamIdx: number;
+  round: number;
+  running: boolean;
+  seconds: number;
+  turnScore: number;
+  skipsLeft: number;
   wordIdx: number;
   hidden: boolean;
   hintVisible: boolean;
-  seconds: number;
-  running: boolean;
-  round: number;
-  skipsLeft: number;
-  turnScore: number;
   turnLog: TurnLogItem[];
+  gameEnded: boolean;
 }
 
 export interface GameActions {

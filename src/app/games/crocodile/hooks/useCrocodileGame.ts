@@ -13,15 +13,17 @@ export function useCrocodileGame() {
   // Состояние игры
   const [teams, setTeams] = useState<Team[]>(DEFAULT_TEAMS);
   const [activeTeamIdx, setActiveTeamIdx] = useState(0);
+  const [round, setRound] = useState(1);
+  const [running, setRunning] = useState(false);
+  const [seconds, setSeconds] = useState(settings.roundSeconds);
+  const [turnScore, setTurnScore] = useState(0);
+  const [skipsLeft, setSkipsLeft] = useState(settings.skipLimit);
   const [wordIdx, setWordIdx] = useState(0);
   const [hidden, setHidden] = useState(true);
   const [hintVisible, setHintVisible] = useState(false);
-  const [seconds, setSeconds] = useState(settings.roundSeconds);
-  const [running, setRunning] = useState(false);
-  const [round, setRound] = useState(1);
-  const [skipsLeft, setSkipsLeft] = useState(settings.skipLimit);
-  const [turnScore, setTurnScore] = useState(0);
   const [turnLog, setTurnLog] = useState<TurnLogItem[]>([]);
+  const [gameEnded, setGameEnded] = useState(false);
+  const [roundStartTeamIdx, setRoundStartTeamIdx] = useState(0);
 
   // Пул слов
   const pool = useMemo<CrocWord[]>(() => {
@@ -35,7 +37,18 @@ export function useCrocodileGame() {
   const current = pool.length ? pool[wordIdx % pool.length] : undefined;
 
   // Победитель
-  const winner = teams.find((t) => t.score >= settings.goalPoints) ?? null;
+  // Определяем победителя только если игра завершена
+  const winner = useMemo(() => {
+    if (!gameEnded) return null;
+    
+    // Находим команду с максимальным счетом среди тех, кто достиг цели
+    const qualifiedTeams = teams.filter(t => t.score >= settings.goalPoints);
+    if (qualifiedTeams.length === 0) return null;
+    
+    return qualifiedTeams.reduce((prev, current) => 
+      current.score > prev.score ? current : prev
+    );
+  }, [teams, settings.goalPoints, gameEnded]);
 
   // Обновление зависимых значений при изменении настроек
   useEffect(() => {
@@ -108,7 +121,7 @@ export function useCrocodileGame() {
     setRunning(false);
     
     // Добавляем очки команде и переключаем ведущего
-    setTeams(prev => prev.map((t, i) => {
+    const updatedTeams = teams.map((t, i) => {
       if (i === activeTeamIdx) {
         const nextPresenterIndex = t.presenters.length > 0 
           ? (t.currentPresenterIndex + 1) % t.presenters.length 
@@ -120,20 +133,34 @@ export function useCrocodileGame() {
         };
       }
       return t;
-    }));
-
-    // Переходим к следующей команде
-    setActiveTeamIdx(prev => (prev + 1) % teams.length);
+    });
     
-    // Увеличиваем раунд если прошли полный круг команд
-    if ((activeTeamIdx + 1) % teams.length === 0) {
-      setRound(prev => prev + 1);
+    setTeams(updatedTeams);
+
+    const nextTeamIdx = (activeTeamIdx + 1) % teams.length;
+    const isRoundComplete = nextTeamIdx === roundStartTeamIdx;
+    
+    // Проверяем, есть ли команды, достигшие цели
+    const teamsAtGoal = updatedTeams.filter(t => t.score >= settings.goalPoints);
+    
+    if (teamsAtGoal.length > 0 && isRoundComplete) {
+      // Раунд завершен и есть команды, достигшие цели - завершаем игру
+      setGameEnded(true);
+    } else {
+      // Переходим к следующей команде
+      setActiveTeamIdx(nextTeamIdx);
+      
+      // Увеличиваем раунд если прошли полный круг команд
+      if (isRoundComplete) {
+        setRound(prev => prev + 1);
+        setRoundStartTeamIdx(nextTeamIdx);
+      }
     }
 
     setTurnScore(0);
     setHidden(true);
     setHintVisible(false);
-  }, [activeTeamIdx, teams.length, turnScore]);
+  }, [activeTeamIdx, teams, turnScore, settings.goalPoints, roundStartTeamIdx]);
 
   const onCorrect = useCallback(() => {
     if (!current) return;
@@ -179,17 +206,19 @@ export function useCrocodileGame() {
   }, [current, skipsLeft, settings.minusOnSkip, teams, activeTeamIdx, nextWord]);
 
   const resetGame = useCallback(() => {
-    setTeams(prev => prev.map(t => ({ ...t, score: 0 })));
+    setTeams(DEFAULT_TEAMS);
     setActiveTeamIdx(0);
+    setRound(1);
+    setRunning(false);
+    setSeconds(settings.roundSeconds);
+    setTurnScore(0);
+    setSkipsLeft(settings.skipLimit);
     setWordIdx(0);
     setHidden(true);
     setHintVisible(false);
-    setSeconds(settings.roundSeconds);
-    setRunning(false);
-    setRound(1);
-    setSkipsLeft(settings.skipLimit);
-    setTurnScore(0);
     setTurnLog([]);
+    setGameEnded(false);
+    setRoundStartTeamIdx(0);
   }, [settings.roundSeconds, settings.skipLimit]);
 
   const toggleWordVisibility = useCallback(() => {
@@ -208,15 +237,16 @@ export function useCrocodileGame() {
   const gameState: GameState = {
     teams,
     activeTeamIdx,
+    round,
+    running,
+    seconds,
+    turnScore,
+    skipsLeft,
     wordIdx,
     hidden,
     hintVisible,
-    seconds,
-    running,
-    round,
-    skipsLeft,
-    turnScore,
     turnLog,
+    gameEnded,
   };
 
   const gameActions: GameActions = {
