@@ -31,6 +31,6 @@ export const KEYBOARD_SHORTCUTS = [
   { key: 'Пробел', action: 'Отгадали / Старт' },
   { key: 'Enter', action: 'Завершить ход / Старт' },
   { key: '→', action: 'Пропуск' },
-  { key: 'H', action: 'Показать/скрыть слово' },
+  { key: 'H', action: 'Показать слово на 5 сек' },
   { key: 'R', action: 'Сброс игры' },
 ];

@@ -36,7 +36,7 @@ export function GameControls({ gameState, gameActions, minusOnSkip }: GameContro
           onClick={toggleWordVisibility}
           title="H"
         >
-          {hidden ? "Показать" : "Скрыть"} слово (H)
+          Показать слово (H)
         </button>
         <button 
           className="btn" 

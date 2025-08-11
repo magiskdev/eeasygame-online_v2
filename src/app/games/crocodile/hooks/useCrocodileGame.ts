@@ -62,6 +62,17 @@ export function useCrocodileGame() {
     return () => clearInterval(timer);
   }, [running, seconds]);
 
+  // Автоматическое скрытие слова через 5 секунд
+  useEffect(() => {
+    if (!running || hidden) return;
+    
+    const hideTimer = setTimeout(() => {
+      setHidden(true);
+    }, 5000); // 5 секунд
+
+    return () => clearTimeout(hideTimer);
+  }, [running, hidden, wordIdx]); // wordIdx добавлен для сброса таймера при смене слова
+
   // Показ подсказки
   useEffect(() => {
     if (!running || !settings.allowHints || hintVisible) return;
@@ -76,7 +87,7 @@ export function useCrocodileGame() {
   // Функции управления игрой
   const nextWord = useCallback(() => {
     setWordIdx(prev => prev + 1);
-    setHidden(true);
+    setHidden(false); // Показываем новое слово сразу
     setHintVisible(false);
   }, []);
 
@@ -89,7 +100,7 @@ export function useCrocodileGame() {
     setSeconds(settings.roundSeconds);
     setSkipsLeft(settings.skipLimit);
     setTurnScore(0);
-    setHidden(true);
+    setHidden(false); // Показываем слово сразу при старте
     setHintVisible(false);
   }, [settings.roundSeconds, settings.skipLimit]);
 
@@ -174,7 +185,8 @@ export function useCrocodileGame() {
   }, [settings.roundSeconds, settings.skipLimit]);
 
   const toggleWordVisibility = useCallback(() => {
-    setHidden(prev => !prev);
+    // Принудительно показываем слово на 5 секунд
+    setHidden(false);
   }, []);
 
   const updateTeams = useCallback((newTeams: Team[]) => {
