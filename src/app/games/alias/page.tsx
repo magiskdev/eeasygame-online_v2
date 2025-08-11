@@ -7,10 +7,10 @@ import {
   type DictionaryKey,
   buildCustomDictionary,
 } from "./components/lib/dictionaries";
-import { HowToPlayModal } from "./components/HowToPlayModal";
-import { SettingsModal } from "./components/SettingsModal";
 import { Scoreboard } from "./components/Scoreboard";
 import { TeamManager } from "./components/TeamManager";
+import { AliasHowToPlay } from "./components/AliasHowToPlay";
+import { AliasSettings } from "./components/AliasSettings";
 
 type Team = { id: string; name: string; score: number };
 
@@ -308,13 +308,13 @@ export default function AliasGamePage() {
         )}
       </AnimatePresence>
 
-      {/* Модалки */}
-      <HowToPlayModal open={howToOpen} onClose={() => setHowToOpen(false)} />
-      <SettingsModal
+      <AliasHowToPlay open={howToOpen} onClose={() => setHowToOpen(false)} />
+
+      <AliasSettings
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
-        value={settings}
-        onChange={setSettings}
+        settings={settings}
+        onSave={setSettings}
       />
     </section>
   );

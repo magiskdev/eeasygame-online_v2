@@ -9,8 +9,8 @@ import { HowToPlayModal } from './HowToPlayModal';
 import { SettingsModal } from './SettingsModal';
 import { usePerMoveTimer } from '../lib/usePerMoveTimer';
 import { aiBestMove } from '../lib/ai';
-import { buildEmpty, checkState, coordsToIndex, indexToCoords, nextPlayer } from '../lib/rules';
-import type { Cell, GameMode, Player, State, Settings, ChallengeKey, Move } from '../lib/types';
+import { buildEmpty, checkState, indexToCoords, } from '../lib/rules';
+import type { Cell, Player, State, Settings, Move } from '../lib/types';
 
 export const TicTacToe: React.FC = () => {
   // настройки (можно вынести в zustand при желании)
@@ -217,7 +217,7 @@ export const TicTacToe: React.FC = () => {
         <div className="flex flex-wrap gap-2">
           <button className="btn" onClick={() => setHowtoOpen(true)}>Как играть</button>
           <button className="btn" onClick={() => setSettingsOpen(true)}>Настройки</button>
-          <button className="btn" onClick={newRound}>Новая партия (N)</button>
+          <button className="btn" onClick={() => newRound()}>Новая партия (N)</button>
           <button className="btn" onClick={hardReset}>Сброс серии</button>
         </div>
       </header>

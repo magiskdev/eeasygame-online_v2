@@ -2,6 +2,7 @@
 import React from "react";
 import { Header } from "widgets/header/Header";
 import { Footer } from "widgets/footer/Footer";
+
 export const PageShell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen flex flex-col">
     <Header />
