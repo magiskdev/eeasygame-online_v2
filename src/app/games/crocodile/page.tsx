@@ -9,7 +9,7 @@ import { GameControls } from "./components/GameControls";
 import { WinnerDisplay } from "./components/WinnerDisplay";
 import { Scoreboard } from "./components/Scoreboard";
 import { TeamManager } from "./components/TeamManager";
-import { PresenterQueue } from "./components/PresenterQueue";
+
 import { RoundLogModal } from "./components/RoundLogModal";
 import { CrocodileSettings } from "./components/CrocodileSettings";
 import { CrocodileHowToPlay } from "./components/CrocodileHowToPlay";
@@ -85,48 +85,10 @@ export default function CrocodileGamePage() {
           </div>
           
           <div className="card">
-            <PresenterQueue
-              team={activeTeam}
-              onUpdate={(newPresenters) =>
-                gameActions.updateTeams(
-                  gameState.teams.map((t, i) =>
-                    i === gameState.activeTeamIdx
-                      ? { ...t, presenters: newPresenters }
-                      : t
-                  )
-                )
-              }
-              disabled={gameState.running}
-            />
-          </div>
-          
-          <div className="card">
             <TeamManager
               teams={gameState.teams}
-              onAdd={(name) =>
-                gameActions.updateTeams([
-                  ...gameState.teams,
-                  { 
-                    id: crypto.randomUUID(), 
-                    name, 
-                    score: 0, 
-                    presenters: [] 
-                  },
-                ])
-              }
-              onRename={(id, name) =>
-                gameActions.updateTeams(
-                  gameState.teams.map((t) => 
-                    t.id === id ? { ...t, name } : t
-                  )
-                )
-              }
-              onRemove={(id) => {
-                gameActions.updateTeams(
-                  gameState.teams.filter((t) => t.id !== id)
-                );
-                gameActions.setActiveTeam(0);
-              }}
+              activeTeamIdx={gameState.activeTeamIdx}
+              onUpdateTeams={gameActions.updateTeams}
               disabledWhileRunning={gameState.running}
             />
           </div>

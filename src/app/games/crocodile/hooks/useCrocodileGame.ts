@@ -107,12 +107,20 @@ export function useCrocodileGame() {
   const endTurn = useCallback(() => {
     setRunning(false);
     
-    // Добавляем очки команде
-    setTeams(prev => prev.map((t, i) => 
-      i === activeTeamIdx 
-        ? { ...t, score: t.score + turnScore }
-        : t
-    ));
+    // Добавляем очки команде и переключаем ведущего
+    setTeams(prev => prev.map((t, i) => {
+      if (i === activeTeamIdx) {
+        const nextPresenterIndex = t.presenters.length > 0 
+          ? (t.currentPresenterIndex + 1) % t.presenters.length 
+          : 0;
+        return { 
+          ...t, 
+          score: t.score + turnScore,
+          currentPresenterIndex: nextPresenterIndex
+        };
+      }
+      return t;
+    }));
 
     // Переходим к следующей команде
     setActiveTeamIdx(prev => (prev + 1) % teams.length);

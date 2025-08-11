@@ -3,6 +3,7 @@ export interface Team {
   name: string;
   score: number;
   presenters: string[];
+  currentPresenterIndex: number;
 }
 
 export interface CrocodileSettings {

@@ -30,6 +30,13 @@ export function GameHeader({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const getCurrentPresenter = () => {
+    if (!activeTeam.presenters || activeTeam.presenters.length === 0) {
+      return 'Нет игроков';
+    }
+    return activeTeam.presenters[activeTeam.currentPresenterIndex] || 'Не выбран';
+  };
+
   return (
     <header className="flex flex-wrap items-center justify-between gap-3 mb-6">
       <div>
@@ -46,6 +53,9 @@ export function GameHeader({
           }`}>
             {formatTime(seconds)}
           </span>
+        </p>
+        <p className="text-gray-500 text-xs">
+          Ведущий: <span className="text-yellow-300 font-medium">{getCurrentPresenter()}</span>
         </p>
       </div>
 

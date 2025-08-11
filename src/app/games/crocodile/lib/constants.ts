@@ -18,12 +18,14 @@ export const DEFAULT_TEAMS: Team[] = [
     name: "Команда А",
     score: 0,
     presenters: ["Аня", "Иван"],
+    currentPresenterIndex: 0,
   },
   {
     id: crypto.randomUUID(),
     name: "Команда Б", 
     score: 0,
     presenters: ["Оля", "Сергей"],
+    currentPresenterIndex: 0,
   },
 ];
 
