@@ -1,8 +1,4 @@
-export type LocationCard = {
-  name: string;
-  category: "classic" | "travel" | "fun";
-  categoryTitle: string;
-};
+import type { LocationCard } from '../lib/types';
 
 const classic = (name: string): LocationCard => ({
   name,
