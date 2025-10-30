@@ -48,7 +48,7 @@ export function SettingsModal({
         <Select
           label="Размер поля"
           value={String(draft.size)}
-          onChange={(v) => setDraft((s) => ({ ...s, size: +v }))}
+          onChange={(v) => setDraft((s: any) => ({ ...s, size: +v }))}
           options={[
             ["3", "3×3"],
             ["4", "4×4"],
